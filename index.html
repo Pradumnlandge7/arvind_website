@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KhetKart — Seen it in the Reel? Get it here.</title>
+<title>KhetKart — Farm-picked products, delivered to your door</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -22,32 +22,47 @@
   body{margin:0;font-family:'Work Sans',sans-serif;background:var(--cream);color:var(--ink);}
   h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
   a{text-decoration:none;color:inherit;}
+  button{font-family:inherit;}
 
-  /* Header */
-  header{background:var(--forest);color:var(--cream);padding:18px 6vw;display:flex;align-items:center;justify-content:space-between;}
+  header.site{background:var(--forest);color:var(--cream);padding:18px 6vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
   .logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.5rem;letter-spacing:0.5px;}
   .logo span{color:var(--wheat);}
-  header nav a{color:var(--cream);font-weight:500;opacity:0.85;font-size:0.95rem;}
-  header nav a:hover{opacity:1;}
+  header.site nav a{color:var(--cream);font-weight:500;opacity:0.85;font-size:0.95rem;}
+  header.site nav a:hover{opacity:1;}
 
-  /* Hero */
-  .hero{background:var(--forest);color:var(--paper);padding:64px 6vw 80px;position:relative;overflow:hidden;}
+  .hero{background:var(--forest);color:var(--paper);padding:56px 6vw 74px;position:relative;overflow:hidden;}
   .hero-inner{max-width:640px;position:relative;z-index:2;}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(232,184,75,0.15);border:1px solid var(--wheat);color:var(--wheat);padding:5px 14px;border-radius:100px;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:22px;}
-  .hero h1{font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.08;font-weight:700;margin-bottom:18px;}
+  .hero h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;font-weight:700;margin-bottom:16px;}
   .hero h1 em{font-style:italic;color:var(--wheat);}
-  .hero p{font-size:1.05rem;line-height:1.6;color:#E5E0D2;max-width:480px;margin-bottom:0;}
-  .hero-furrows{position:absolute;right:-5%;top:0;bottom:0;width:55%;opacity:0.18;z-index:1;}
+  .hero p{font-size:1.03rem;line-height:1.6;color:#E5E0D2;max-width:480px;margin-bottom:0;}
 
-  /* Sponsored strip */
-  .ad-strip{max-width:1180px;margin:-34px auto 0;padding:0 6vw;position:relative;z-index:3;}
-  .ad-card{background:var(--paper);border:1.5px dashed var(--barn);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+  .search-wrap{max-width:1180px;margin:-26px auto 0;padding:0 6vw;position:relative;z-index:5;}
+  .search-box{background:var(--paper);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;align-items:center;gap:10px;padding:14px 18px;}
+  .search-box svg{width:18px;height:18px;fill:none;stroke:var(--soil);stroke-width:2;flex-shrink:0;}
+  .search-box input{border:none;outline:none;flex:1;font-size:0.96rem;background:transparent;color:var(--ink);}
+  .search-box input::placeholder{color:#a89f8a;}
+
+  .trust{max-width:1180px;margin:34px auto 0;padding:0 6vw;display:flex;flex-wrap:wrap;gap:14px 30px;justify-content:center;}
+  .trust-item{display:flex;align-items:center;gap:9px;font-size:0.85rem;color:var(--soil);font-weight:500;}
+  .trust-item svg{width:18px;height:18px;fill:var(--forest);flex-shrink:0;}
+
+  .ad-strip{max-width:1180px;margin:36px auto 0;padding:0 6vw;position:relative;z-index:3;}
+  .ad-card{background:var(--paper);border:1.5px dashed var(--barn);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(0,0,0,0.06);}
   .ad-card img{width:56px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0;}
   .ad-eyebrow{font-size:0.68rem;font-weight:700;color:var(--barn);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
   .ad-text{flex:1;font-size:0.92rem;color:#3a3a3a;}
   .ad-card a.ad-cta{background:var(--barn);color:#fff;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:6px;white-space:nowrap;}
 
-  /* Product grid section */
+  .how{max-width:1180px;margin:64px auto 0;padding:0 6vw;}
+  .how h2{color:var(--forest);font-size:1.6rem;margin-bottom:28px;text-align:center;}
+  .how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .how-step{background:var(--paper);border-radius:14px;padding:24px 20px;text-align:center;box-shadow:0 4px 14px rgba(31,58,46,0.06);}
+  .how-step .num{width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--wheat);font-family:'Fraunces',serif;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1rem;}
+  .how-step h3{font-size:1.02rem;color:var(--forest);margin-bottom:8px;}
+  .how-step p{font-size:0.85rem;color:#6b6455;line-height:1.5;margin:0;}
+  @media(max-width:700px){ .how-steps{grid-template-columns:1fr;} }
+
   .section-head{max-width:1180px;margin:64px auto 28px;padding:0 6vw;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
   .section-head h2{font-size:1.8rem;color:var(--forest);}
   .section-head p{color:var(--soil);font-size:0.9rem;margin:0;}
@@ -56,15 +71,17 @@
 
   .card{background:var(--paper);border-radius:14px;overflow:hidden;position:relative;box-shadow:0 4px 14px rgba(31,58,46,0.08);transition:transform 0.2s ease, box-shadow 0.2s ease;border-top:4px solid var(--wheat);}
   .card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(31,58,46,0.16);}
-  .card-media{position:relative;aspect-ratio:9/13;background:#e9e3d3;overflow:hidden;}
+  .card-media{position:relative;aspect-ratio:9/13;background:#e9e3d3;overflow:hidden;cursor:zoom-in;}
   .card-media img{width:100%;height:100%;object-fit:cover;display:block;}
-  .reel-badge{position:absolute;top:10px;left:10px;background:rgba(27,27,27,0.55);backdrop-filter:blur(2px);color:#fff;font-size:0.68rem;font-weight:600;padding:5px 9px;border-radius:100px;display:flex;align-items:center;gap:5px;}
-  .reel-badge svg{width:11px;height:11px;fill:var(--wheat);}
-  .gallery-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:2;}
-  .gallery-dots button{width:6px;height:6px;padding:0;border-radius:50%;border:none;background:rgba(255,255,255,0.5);}
+
+  .gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(20,20,20,0.5);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:4;padding:0;}
+  .gallery-arrow:hover{background:rgba(20,20,20,0.75);}
+  .gallery-arrow.prevBtn{left:8px;} .gallery-arrow.nextBtn{right:8px;}
+  .gallery-arrow svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+
+  .gallery-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:3;pointer-events:none;}
+  .gallery-dots button{width:6px;height:6px;padding:0;border-radius:50%;border:none;background:rgba(255,255,255,0.55);pointer-events:auto;}
   .gallery-dots button.active{background:#fff;width:16px;border-radius:4px;}
-  .gallery-nav{position:absolute;top:0;bottom:0;width:32%;z-index:1;background:transparent;border:none;cursor:pointer;}
-  .gallery-nav.prev{left:0;} .gallery-nav.next{right:0;}
 
   .card-body{padding:14px 16px 18px;}
   .card-title{font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600;color:var(--forest);margin-bottom:6px;line-height:1.3;}
@@ -72,7 +89,6 @@
   .card-price{color:var(--soil);font-weight:600;font-size:0.95rem;margin-bottom:12px;}
   .buy-btn{display:block;text-align:center;background:var(--forest);color:var(--cream);font-weight:600;font-size:0.88rem;padding:11px;border-radius:8px;transition:background 0.15s ease;}
   .buy-btn:hover{background:var(--forest-light);}
-  .buy-btn svg{width:13px;height:13px;vertical-align:-2px;margin-right:5px;fill:var(--wheat);}
 
   .empty-state{max-width:1180px;margin:0 auto;padding:40px 6vw 100px;text-align:center;color:var(--soil);}
   .empty-state h3{color:var(--forest);font-size:1.3rem;margin-bottom:8px;}
@@ -80,32 +96,59 @@
   footer{background:var(--forest);color:#cfd8cf;padding:34px 6vw;text-align:center;font-size:0.85rem;}
   footer a{color:var(--wheat);}
 
+  .lightbox{position:fixed;inset:0;background:rgba(15,20,17,0.92);display:none;align-items:center;justify-content:center;z-index:200;padding:5vw;}
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:min(88vw,700px);max-height:82vh;object-fit:contain;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .lightbox-close{position:absolute;top:22px;right:26px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.12);border:none;color:#fff;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .lightbox-close:hover{background:rgba(255,255,255,0.22);}
+  .lightbox .gallery-arrow{width:44px;height:44px;background:rgba(255,255,255,0.12);}
+  .lightbox .gallery-arrow:hover{background:rgba(255,255,255,0.25);}
+  .lightbox .gallery-arrow svg{width:18px;height:18px;}
+  .lightbox .prevBtn{left:16px;} .lightbox .nextBtn{right:16px;}
+
+  .help-fab{position:fixed;bottom:22px;right:22px;background:#25D366;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,0,0,0.25);z-index:60;}
+  .help-fab svg{width:26px;height:26px;fill:#fff;}
+  .help-fab:hover{transform:scale(1.06);}
+
   @media(max-width:640px){
-    .hero{padding:48px 6vw 64px;}
-    .ad-strip{margin-top:-20px;}
+    .hero{padding:44px 6vw 58px;}
+    .ad-strip{margin-top:24px;}
     .ad-card{flex-wrap:wrap;}
   }
 </style>
 </head>
 <body>
 
-<header>
+<header class="site">
   <div class="logo">Khet<span>Kart</span></div>
   <nav><a href="admin.html">Admin</a></nav>
 </header>
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="eyebrow">🎥 As seen on our farm reels</div>
-    <h1>Seen it in the reel?<br><em>Get it here.</em></h1>
-    <p>Every product our farmers show you on Instagram — tools, seeds, produce and more — lands here first. Tap a product, and we'll take you straight to it.</p>
+    <div class="eyebrow">🌾 From our farmers, straight to you</div>
+    <h1>Farm-picked products,<br><em>delivered to your door.</em></h1>
+    <p>Every tool, seed and product our farmers use and trust — in one place. Tap anything you like, and we'll take you straight to it on Amazon.</p>
   </div>
 </section>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" type="text" placeholder="Search for a product, e.g. spanner, seeds, sprayer…">
+  </div>
+</div>
+
+<div class="trust">
+  <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg> Farmer verified</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M21 8L12 3 3 8v8l9 5 9-5V8zM12 13v8"/></svg> Delivered by Amazon</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M4 4h16v4H4zM4 10h16v10H4z"/></svg> Same product from the video</div>
+</div>
 
 <div class="ad-strip" id="adStrip"></div>
 
 <div class="section-head">
-  <h2>From the reels</h2>
+  <h2>Our products</h2>
   <p id="countLabel">Loading products…</p>
 </div>
 
@@ -115,17 +158,52 @@
   <p>Check back soon — new products from the farm are added regularly.</p>
 </div>
 
+<div class="how">
+  <h2>How KhetKart works</h2>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="num">1</div>
+      <h3>Watch the video</h3>
+      <p>See a product our farmers actually use, on Instagram.</p>
+    </div>
+    <div class="how-step">
+      <div class="num">2</div>
+      <h3>Find it here</h3>
+      <p>Search or scroll to find the exact same product on KhetKart.</p>
+    </div>
+    <div class="how-step">
+      <div class="num">3</div>
+      <h3>Buy safely</h3>
+      <p>Tap "Buy on Amazon" — you check out on Amazon itself, safely.</p>
+    </div>
+  </div>
+</div>
+
 <footer>
   KhetKart · Straight from the farm, straight to your cart.
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button class="gallery-arrow prevBtn" id="lightboxPrev" aria-label="Previous photo" style="display:none;">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="gallery-arrow nextBtn" id="lightboxNext" aria-label="Next photo" style="display:none;">
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<a class="help-fab" id="helpFab" href="https://wa.me/910000000000" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.1-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.6 0-3.1-.43-4.4-1.2l-.32-.19-3.02.79.8-2.95-.2-.3A7.94 7.94 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.4-5.9c-.24-.12-1.43-.7-1.65-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.93-1.19-.71-.63-1.19-1.42-1.33-1.66-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41-.14-.01-.3-.01-.46-.01-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.43-.58 1.63-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28z"/></svg>
+</a>
+
 <script>
-// ---- CONFIG ----
-// These files must sit next to this index.html on GitHub Pages.
 const PRODUCTS_URL = 'products.json';
 const ADS_URL = 'ads.json';
 
-const PLAY_ICON = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+let ALL_PRODUCTS = [];
+let DISPLAYED_PRODUCTS = [];
 
 function escapeHtml(str){
   const d = document.createElement('div');
@@ -135,7 +213,7 @@ function escapeHtml(str){
 
 async function loadJSON(url){
   try{
-    const res = await fetch(url + '?t=' + Date.now()); // cache-bust so updates show instantly
+    const res = await fetch(url + '?t=' + Date.now());
     if(!res.ok) return [];
     return await res.json();
   }catch(e){
@@ -147,7 +225,6 @@ async function loadJSON(url){
 function renderAds(ads){
   const strip = document.getElementById('adStrip');
   if(!ads || ads.length === 0){ strip.innerHTML=''; return; }
-  // Show one ad at a time (rotate on reload); simple & clean
   const ad = ads[Math.floor(Math.random()*ads.length)];
   strip.innerHTML = `
     <div class="ad-card">
@@ -160,10 +237,16 @@ function renderAds(ads){
     </div>`;
 }
 
+function getImages(p){
+  return (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+}
+
 function renderProducts(products){
   const grid = document.getElementById('grid');
   const empty = document.getElementById('emptyState');
   const count = document.getElementById('countLabel');
+
+  DISPLAYED_PRODUCTS = products.slice().reverse();
 
   if(!products || products.length === 0){
     grid.innerHTML = '';
@@ -174,17 +257,16 @@ function renderProducts(products){
   empty.style.display = 'none';
   count.textContent = products.length + (products.length === 1 ? ' product' : ' products');
 
-  grid.innerHTML = products.slice().reverse().map(p => {
-    const imgs = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+  grid.innerHTML = DISPLAYED_PRODUCTS.map((p, idx) => {
+    const imgs = getImages(p);
     const mainImg = imgs[0] || '';
     return `
     <div class="card">
-      <div class="card-media" data-images="${btoa(unescape(encodeURIComponent(JSON.stringify(imgs))))}">
+      <div class="card-media" data-idx="${idx}" data-current="0">
         <img class="main-img" src="${escapeHtml(mainImg)}" alt="${escapeHtml(p.title)}" loading="lazy" onerror="this.src='https://placehold.co/400x580/1F3A2E/F7F1E4?text=KhetKart'">
-        <div class="reel-badge">${PLAY_ICON} Reel</div>
         ${imgs.length > 1 ? `
-          <button class="gallery-nav prev" aria-label="Previous photo"></button>
-          <button class="gallery-nav next" aria-label="Next photo"></button>
+          <button class="gallery-arrow prevBtn" aria-label="Previous photo"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="gallery-arrow nextBtn" aria-label="Next photo"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
           <div class="gallery-dots">${imgs.map((_,gi)=>`<button class="gallery-dot${gi===0?' active':''}" data-index="${gi}" aria-label="Photo ${gi+1}"></button>`).join('')}</div>
         ` : ''}
       </div>
@@ -192,16 +274,15 @@ function renderProducts(products){
         <div class="card-title">${escapeHtml(p.title)}</div>
         ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
         ${p.price ? `<div class="card-price">₹${escapeHtml(p.price)}</div>` : ''}
-        <a class="buy-btn" href="${escapeHtml(p.amazonLink)}" target="_blank" rel="noopener">
-          ${PLAY_ICON.replace('fill:var(--wheat)','')} Buy on Amazon
-        </a>
+        <a class="buy-btn" href="${escapeHtml(p.amazonLink)}" target="_blank" rel="noopener">Buy on Amazon</a>
       </div>
     </div>
   `;}).join('');
 }
 
-function setActiveImage(media, index){
-  const images = JSON.parse(decodeURIComponent(escape(atob(media.dataset.images))));
+function setCardImage(media, index){
+  const idx = parseInt(media.dataset.idx);
+  const images = getImages(DISPLAYED_PRODUCTS[idx]);
   if(index < 0) index = images.length - 1;
   if(index >= images.length) index = 0;
   media.querySelector('.main-img').src = images[index];
@@ -213,17 +294,67 @@ document.getElementById('grid').addEventListener('click', (e) => {
   const media = e.target.closest('.card-media');
   if(!media) return;
   const current = parseInt(media.dataset.current || '0');
-  if(e.target.classList.contains('gallery-dot')){
-    setActiveImage(media, parseInt(e.target.dataset.index));
-  } else if(e.target.classList.contains('prev')){
-    setActiveImage(media, current - 1);
-  } else if(e.target.classList.contains('next')){
-    setActiveImage(media, current + 1);
+
+  if(e.target.closest('.prevBtn')){
+    e.stopPropagation();
+    setCardImage(media, current - 1);
+    return;
   }
+  if(e.target.closest('.nextBtn')){
+    e.stopPropagation();
+    setCardImage(media, current + 1);
+    return;
+  }
+  if(e.target.classList.contains('gallery-dot')){
+    setCardImage(media, parseInt(e.target.dataset.index));
+    return;
+  }
+  const idx = parseInt(media.dataset.idx);
+  const images = getImages(DISPLAYED_PRODUCTS[idx]);
+  openLightbox(images, current);
+});
+
+let LB_IMAGES = [];
+let LB_INDEX = 0;
+
+function openLightbox(images, startIndex){
+  if(!images || images.length === 0) return;
+  LB_IMAGES = images;
+  LB_INDEX = startIndex || 0;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+function updateLightbox(){
+  document.getElementById('lightboxImg').src = LB_IMAGES[LB_INDEX];
+  const multi = LB_IMAGES.length > 1;
+  document.getElementById('lightboxPrev').style.display = multi ? 'flex' : 'none';
+  document.getElementById('lightboxNext').style.display = multi ? 'flex' : 'none';
+}
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+document.getElementById('lightboxPrev').addEventListener('click', () => { LB_INDEX = (LB_INDEX - 1 + LB_IMAGES.length) % LB_IMAGES.length; updateLightbox(); });
+document.getElementById('lightboxNext').addEventListener('click', () => { LB_INDEX = (LB_INDEX + 1) % LB_IMAGES.length; updateLightbox(); });
+document.getElementById('lightbox').addEventListener('click', (e) => { if(e.target.id === 'lightbox') closeLightbox(); });
+document.addEventListener('keydown', (e) => {
+  if(!document.getElementById('lightbox').classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') { LB_INDEX = (LB_INDEX - 1 + LB_IMAGES.length) % LB_IMAGES.length; updateLightbox(); }
+  if(e.key === 'ArrowRight') { LB_INDEX = (LB_INDEX + 1) % LB_IMAGES.length; updateLightbox(); }
+});
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = !q ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p =>
+    (p.title || '').toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q)
+  );
+  renderProducts(filtered);
 });
 
 (async function init(){
   const [products, ads] = await Promise.all([loadJSON(PRODUCTS_URL), loadJSON(ADS_URL)]);
+  ALL_PRODUCTS = products;
   renderProducts(products);
   renderAds(ads);
 })();
