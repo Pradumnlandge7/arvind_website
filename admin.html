@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KhetKart Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#1F3A2E; --forest-light:#2C4F3D; --wheat:#E8B84B; --wheat-dark:#C99A2E;
+    --soil:#6B4423; --cream:#F7F1E4; --barn:#A63A32; --ink:#1B1B1B; --paper:#FFFDF8;
+    --danger:#A63A32; --ok:#3B7A4F;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Work Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+  label{display:block;font-size:0.85rem;font-weight:600;color:var(--soil);margin-bottom:6px;}
+  input, textarea{width:100%;padding:11px 13px;border:1.5px solid #d8cfb8;border-radius:8px;font-family:inherit;font-size:0.95rem;background:var(--paper);margin-bottom:16px;}
+  input:focus, textarea:focus{outline:none;border-color:var(--forest);}
+  button{cursor:pointer;font-family:inherit;font-weight:600;border:none;border-radius:8px;padding:12px 20px;font-size:0.92rem;}
+  .btn-primary{background:var(--forest);color:var(--cream);}
+  .btn-primary:hover{background:var(--forest-light);}
+  .btn-primary:disabled{opacity:0.6;cursor:not-allowed;}
+  .btn-danger{background:transparent;color:var(--barn);border:1.5px solid var(--barn);padding:7px 12px;font-size:0.8rem;}
+  .btn-danger:hover{background:var(--barn);color:#fff;}
+  .btn-ghost{background:transparent;color:var(--soil);border:1.5px solid #d8cfb8;}
+
+  /* Centered gate screens */
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .gate-box{background:var(--paper);border-radius:16px;padding:38px 34px;max-width:400px;width:100%;box-shadow:0 12px 40px rgba(31,58,46,0.12);}
+  .gate-box h1{color:var(--forest);font-size:1.5rem;margin-bottom:6px;}
+  .gate-box .sub{color:var(--soil);font-size:0.88rem;margin-bottom:24px;line-height:1.5;}
+  .hint{font-size:0.78rem;color:#8a8375;margin:-10px 0 16px;line-height:1.4;}
+  .hint a{color:var(--forest);}
+  .error{background:#fbe9e7;color:var(--barn);padding:10px 14px;border-radius:8px;font-size:0.85rem;margin-bottom:16px;display:none;}
+
+  /* Dashboard */
+  header.top{background:var(--forest);color:var(--cream);padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.3rem;}
+  .logo span{color:var(--wheat);}
+  header.top a, header.top button.btn-ghost{color:var(--cream);border-color:rgba(255,255,255,0.35);}
+
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 5vw 80px;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--forest);color:var(--cream);padding:12px 22px;border-radius:100px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.2);opacity:0;pointer-events:none;transition:opacity 0.25s ease, transform 0.25s ease;z-index:99;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+  .toast.err{background:var(--barn);}
+
+  .panel{background:var(--paper);border-radius:14px;padding:26px 28px;margin-bottom:28px;box-shadow:0 4px 14px rgba(31,58,46,0.06);}
+  .panel h2{color:var(--forest);font-size:1.25rem;margin-bottom:4px;}
+  .panel .sub{color:var(--soil);font-size:0.85rem;margin-bottom:20px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:560px){.row2{grid-template-columns:1fr;}}
+
+  .imgtabs{display:flex;gap:8px;margin-bottom:12px;}
+  .imgtabs button{background:transparent;border:1.5px solid #d8cfb8;color:var(--soil);padding:7px 14px;font-size:0.8rem;border-radius:100px;}
+  .imgtabs button.active{background:var(--forest);color:var(--cream);border-color:var(--forest);}
+
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--soil);padding:0 10px 10px;border-bottom:1.5px solid #e6dfc9;}
+  td{padding:10px;border-bottom:1px solid #ece5d2;font-size:0.88rem;vertical-align:middle;}
+  td img{width:42px;height:56px;object-fit:cover;border-radius:5px;}
+  td.price{font-weight:600;color:var(--soil);white-space:nowrap;}
+  .muted-empty{color:#9c9585;font-size:0.88rem;padding:16px 0;}
+
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:-2px;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<!-- ============ SETUP GATE (first time only) ============ -->
+<div class="gate" id="setupGate" style="display:none;">
+  <div class="gate-box">
+    <h1>Connect KhetKart</h1>
+    <div class="sub">One-time setup. This connects the admin panel to your GitHub repo so products save live to your website.</div>
+    <div class="error" id="setupError"></div>
+    <label>GitHub username / organisation</label>
+    <input id="cfgOwner" placeholder="e.g. rameshfarms">
+    <label>Repository name</label>
+    <input id="cfgRepo" placeholder="e.g. khetkart">
+    <label>Branch</label>
+    <input id="cfgBranch" placeholder="main" value="main">
+    <label>Personal Access Token</label>
+    <input id="cfgToken" type="password" placeholder="ghp_xxxxxxxxxxxx">
+    <div class="hint">
+      Create a free token at <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> →
+      "Generate new token" (fine-grained) → give it access to this one repo only, with
+      <b>Contents: Read and write</b> permission. Copy the token here — it's only stored on this device, never uploaded anywhere.
+    </div>
+    <label>Set an admin passcode (for quick login next time)</label>
+    <input id="cfgPass" type="password" placeholder="Choose a simple passcode">
+    <button class="btn-primary" style="width:100%;" onclick="saveSetup()">Save &amp; Connect</button>
+  </div>
+</div>
+
+<!-- ============ LOGIN GATE (returning admin) ============ -->
+<div class="gate" id="loginGate" style="display:none;">
+  <div class="gate-box">
+    <h1>Khet<span style="color:var(--wheat)">Kart</span> Admin</h1>
+    <div class="sub">Enter your passcode to manage products and ads.</div>
+    <div class="error" id="loginError"></div>
+    <label>Passcode</label>
+    <input id="loginPass" type="password" placeholder="••••••">
+    <button class="btn-primary" style="width:100%;" onclick="tryLogin()">Log in</button>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="btn-ghost" style="border:none;font-size:0.8rem;text-decoration:underline;" onclick="resetSetup()">Reset connection settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" style="display:none;">
+  <header class="top">
+    <div class="logo">Khet<span>Kart</span> · Admin</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="index.html" target="_blank" style="font-size:0.85rem;opacity:0.9;">View site ↗</a>
+      <button class="btn-ghost" onclick="logout()">Log out</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <div class="panel">
+      <h2>Add a product</h2>
+      <div class="sub">Add the product your brother showed in the reel. It appears on the site instantly.</div>
+      <div class="row2">
+        <div>
+          <label>Product title</label>
+          <input id="pTitle" placeholder="e.g. Manual Seed Sprayer 5L">
+        </div>
+        <div>
+          <label>Price (₹, optional)</label>
+          <input id="pPrice" placeholder="e.g. 799">
+        </div>
+      </div>
+      <label>Amazon product link</label>
+      <input id="pLink" placeholder="https://www.amazon.in/...">
+
+      <label>Product image</label>
+      <div class="imgtabs">
+        <button type="button" class="active" id="tabUrlBtn" onclick="switchImgTab('url')">Paste image link</button>
+        <button type="button" id="tabUploadBtn" onclick="switchImgTab('upload')">Upload a photo</button>
+      </div>
+      <div id="imgUrlBox"><input id="pImageUrl" placeholder="https://..."></div>
+      <div id="imgUploadBox" style="display:none;"><input id="pImageFile" type="file" accept="image/*"></div>
+
+      <button class="btn-primary" id="addProductBtn" onclick="addProduct()">Add product</button>
+    </div>
+
+    <div class="panel">
+      <h2>Current products</h2>
+      <div class="sub">Delete anything that's sold out or no longer relevant.</div>
+      <table id="productsTable">
+        <thead><tr><th></th><th>Title</th><th>Price</th><th></th></tr></thead>
+        <tbody id="productsBody"></tbody>
+      </table>
+      <div class="muted-empty" id="productsEmpty" style="display:none;">No products added yet.</div>
+    </div>
+
+    <div class="panel">
+      <h2>Advertise on the site</h2>
+      <div class="sub">Add a sponsored banner. It rotates on the homepage.</div>
+      <div class="row2">
+        <div>
+          <label>Ad text</label>
+          <input id="aText" placeholder="e.g. Get 10% off fertilizers this month">
+        </div>
+        <div>
+          <label>Link</label>
+          <input id="aLink" placeholder="https://...">
+        </div>
+      </div>
+      <label>Ad image URL (small square image, optional)</label>
+      <input id="aImage" placeholder="https://...">
+      <button class="btn-primary" id="addAdBtn" onclick="addAd()">Add advertisement</button>
+    </div>
+
+    <div class="panel">
+      <h2>Current advertisements</h2>
+      <table id="adsTable">
+        <thead><tr><th></th><th>Text</th><th></th></tr></thead>
+        <tbody id="adsBody"></tbody>
+      </table>
+      <div class="muted-empty" id="adsEmpty" style="display:none;">No advertisements added yet.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== CONFIG / STORAGE ===================== */
+const CFG_KEY = 'khetkart_cfg';
+
+function getCfg(){ try{ return JSON.parse(localStorage.getItem(CFG_KEY)); }catch(e){ return null; } }
+function setCfg(cfg){ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
+
+function showToast(msg, isErr){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  setTimeout(()=> t.className = 'toast', 2600);
+}
+
+/* ===================== GATES ===================== */
+function boot(){
+  const cfg = getCfg();
+  if(!cfg || !cfg.owner || !cfg.repo || !cfg.token){
+    document.getElementById('setupGate').style.display = 'flex';
+    return;
+  }
+  const authed = sessionStorage.getItem('khetkart_authed');
+  if(authed === 'yes'){
+    showDashboard();
+  } else {
+    document.getElementById('loginGate').style.display = 'flex';
+  }
+}
+
+function saveSetup(){
+  const owner = document.getElementById('cfgOwner').value.trim();
+  const repo = document.getElementById('cfgRepo').value.trim();
+  const branch = document.getElementById('cfgBranch').value.trim() || 'main';
+  const token = document.getElementById('cfgToken').value.trim();
+  const pass = document.getElementById('cfgPass').value;
+  const err = document.getElementById('setupError');
+
+  if(!owner || !repo || !token || !pass){
+    err.style.display = 'block';
+    err.textContent = 'Please fill in every field, including a passcode.';
+    return;
+  }
+  setCfg({owner, repo, branch, token, pass});
+  document.getElementById('setupGate').style.display = 'none';
+  sessionStorage.setItem('khetkart_authed', 'yes');
+  showDashboard();
+}
+
+function tryLogin(){
+  const cfg = getCfg();
+  const entered = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  if(entered !== cfg.pass){
+    err.style.display = 'block';
+    err.textContent = 'Wrong passcode. Try again.';
+    return;
+  }
+  sessionStorage.setItem('khetkart_authed', 'yes');
+  document.getElementById('loginGate').style.display = 'none';
+  showDashboard();
+}
+
+function logout(){
+  sessionStorage.removeItem('khetkart_authed');
+  location.reload();
+}
+
+function resetSetup(){
+  if(confirm('This clears the saved GitHub connection on this device (does not delete any products). Continue?')){
+    localStorage.removeItem(CFG_KEY);
+    sessionStorage.removeItem('khetkart_authed');
+    location.reload();
+  }
+}
+
+function showDashboard(){
+  document.getElementById('dashboard').style.display = 'block';
+  loadProducts();
+  loadAds();
+}
+
+/* ===================== IMAGE TAB SWITCH ===================== */
+function switchImgTab(mode){
+  document.getElementById('tabUrlBtn').classList.toggle('active', mode==='url');
+  document.getElementById('tabUploadBtn').classList.toggle('active', mode==='upload');
+  document.getElementById('imgUrlBox').style.display = mode==='url' ? 'block' : 'none';
+  document.getElementById('imgUploadBox').style.display = mode==='upload' ? 'block' : 'none';
+}
+
+/* ===================== GITHUB API HELPERS ===================== */
+function api(path){
+  const cfg = getCfg();
+  return `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
+}
+
+function b64EncodeUnicode(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64DecodeUnicode(str){
+  return decodeURIComponent(escape(atob(str)));
+}
+
+async function ghGetFile(path){
+  const cfg = getCfg();
+  const res = await fetch(api(path) + `?ref=${cfg.branch}`, {
+    headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' }
+  });
+  if(res.status === 404) return { sha: null, data: [] };
+  if(!res.ok) throw new Error('GitHub error ' + res.status + ': ' + (await res.text()));
+  const json = await res.json();
+  const content = b64DecodeUnicode(json.content.replace(/\n/g,''));
+  return { sha: json.sha, data: JSON.parse(content || '[]') };
+}
+
+async function ghPutFile(path, dataObj, sha, message){
+  const cfg = getCfg();
+  const body = {
+    message,
+    content: b64EncodeUnicode(JSON.stringify(dataObj, null, 2)),
+    branch: cfg.branch
+  };
+  if(sha) body.sha = sha;
+  const res = await fetch(api(path), {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error('GitHub error ' + res.status + ': ' + (await res.text()));
+  return res.json();
+}
+
+async function ghUploadImage(file){
+  const cfg = getCfg();
+  const b64 = await new Promise((resolve, reject)=>{
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+  const safeName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g,'');
+  const path = `images/${safeName}`;
+  const res = await fetch(api(path), {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' },
+    body: JSON.stringify({ message: `Upload image ${safeName}`, content: b64, branch: cfg.branch })
+  });
+  if(!res.ok) throw new Error('Image upload failed: ' + (await res.text()));
+  const json = await res.json();
+  return json.content.download_url;
+}
+
+/* ===================== PRODUCTS ===================== */
+async function loadProducts(){
+  try{
+    const { data } = await ghGetFile('products.json');
+    renderProducts(data);
+  }catch(e){
+    showToast('Could not load products: ' + e.message, true);
+  }
+}
+
+function renderProducts(products){
+  const body = document.getElementById('productsBody');
+  const empty = document.getElementById('productsEmpty');
+  if(!products.length){ body.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+  body.innerHTML = products.map((p,i) => `
+    <tr>
+      <td><img src="${p.image}" onerror="this.style.opacity=0.2"></td>
+      <td>${escapeHtml(p.title)}</td>
+      <td class="price">${p.price ? '₹'+escapeHtml(p.price) : '—'}</td>
+      <td><button class="btn-danger" onclick="deleteProduct(${i})">Delete</button></td>
+    </tr>
+  `).join('');
+}
+
+function escapeHtml(str){ const d=document.createElement('div'); d.innerText = str==null?'':str; return d.innerHTML; }
+
+async function addProduct(){
+  const title = document.getElementById('pTitle').value.trim();
+  const price = document.getElementById('pPrice').value.trim();
+  const link = document.getElementById('pLink').value.trim();
+  const urlMode = document.getElementById('imgUrlBox').style.display !== 'none';
+  const btn = document.getElementById('addProductBtn');
+
+  if(!title || !link){ showToast('Please add at least a title and Amazon link.', true); return; }
+
+  let imageUrl = '';
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.innerHTML = '<span class="spinner"></span>Saving…';
+
+  try{
+    if(urlMode){
+      imageUrl = document.getElementById('pImageUrl').value.trim();
+      if(!imageUrl){ showToast('Please paste an image link, or switch to upload.', true); btn.disabled=false; btn.textContent=originalText; return; }
+    } else {
+      const file = document.getElementById('pImageFile').files[0];
+      if(!file){ showToast('Please choose a photo to upload.', true); btn.disabled=false; btn.textContent=originalText; return; }
+      imageUrl = await ghUploadImage(file);
+    }
+
+    const { sha, data } = await ghGetFile('products.json');
+    data.push({ id: Date.now(), title, price, amazonLink: link, image: imageUrl });
+    await ghPutFile('products.json', data, sha, `Add product: ${title}`);
+
+    document.getElementById('pTitle').value='';
+    document.getElementById('pPrice').value='';
+    document.getElementById('pLink').value='';
+    document.getElementById('pImageUrl').value='';
+    document.getElementById('pImageFile').value='';
+
+    renderProducts(data);
+    showToast('Product added! It\'s live on the site now.');
+  }catch(e){
+    showToast('Failed to save: ' + e.message, true);
+  }finally{
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+async function deleteProduct(index){
+  if(!confirm('Remove this product from the site?')) return;
+  try{
+    const { sha, data } = await ghGetFile('products.json');
+    data.splice(index, 1);
+    await ghPutFile('products.json', data, sha, 'Remove product');
+    renderProducts(data);
+    showToast('Product removed.');
+  }catch(e){
+    showToast('Failed to delete: ' + e.message, true);
+  }
+}
+
+/* ===================== ADS ===================== */
+async function loadAds(){
+  try{
+    const { data } = await ghGetFile('ads.json');
+    renderAds(data);
+  }catch(e){
+    showToast('Could not load ads: ' + e.message, true);
+  }
+}
+
+function renderAds(ads){
+  const body = document.getElementById('adsBody');
+  const empty = document.getElementById('adsEmpty');
+  if(!ads.length){ body.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+  body.innerHTML = ads.map((a,i) => `
+    <tr>
+      <td>${a.image ? `<img src="${a.image}" style="width:42px;height:42px;border-radius:6px;object-fit:cover;">` : ''}</td>
+      <td>${escapeHtml(a.text)}</td>
+      <td><button class="btn-danger" onclick="deleteAd(${i})">Delete</button></td>
+    </tr>
+  `).join('');
+}
+
+async function addAd(){
+  const text = document.getElementById('aText').value.trim();
+  const link = document.getElementById('aLink').value.trim();
+  const image = document.getElementById('aImage').value.trim();
+  const btn = document.getElementById('addAdBtn');
+  if(!text || !link){ showToast('Please add ad text and a link.', true); return; }
+
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.innerHTML = '<span class="spinner"></span>Saving…';
+  try{
+    const { sha, data } = await ghGetFile('ads.json');
+    data.push({ id: Date.now(), text, link, image });
+    await ghPutFile('ads.json', data, sha, `Add advertisement`);
+
+    document.getElementById('aText').value='';
+    document.getElementById('aLink').value='';
+    document.getElementById('aImage').value='';
+
+    renderAds(data);
+    showToast('Advertisement added!');
+  }catch(e){
+    showToast('Failed to save: ' + e.message, true);
+  }finally{
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+async function deleteAd(index){
+  if(!confirm('Remove this advertisement?')) return;
+  try{
+    const { sha, data } = await ghGetFile('ads.json');
+    data.splice(index, 1);
+    await ghPutFile('ads.json', data, sha, 'Remove advertisement');
+    renderAds(data);
+    showToast('Advertisement removed.');
+  }catch(e){
+    showToast('Failed to delete: ' + e.message, true);
+  }
+}
+
+boot();
+</script>
+</body>
+</html>

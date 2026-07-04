@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KhetKart — Seen it in the Reel? Get it here.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#1F3A2E;
+    --forest-light:#2C4F3D;
+    --wheat:#E8B84B;
+    --wheat-dark:#C99A2E;
+    --soil:#6B4423;
+    --cream:#F7F1E4;
+    --barn:#A63A32;
+    --ink:#1B1B1B;
+    --paper:#FFFDF8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Work Sans',sans-serif;background:var(--cream);color:var(--ink);}
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+  a{text-decoration:none;color:inherit;}
+
+  /* Header */
+  header{background:var(--forest);color:var(--cream);padding:18px 6vw;display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.5rem;letter-spacing:0.5px;}
+  .logo span{color:var(--wheat);}
+  header nav a{color:var(--cream);font-weight:500;opacity:0.85;font-size:0.95rem;}
+  header nav a:hover{opacity:1;}
+
+  /* Hero */
+  .hero{background:var(--forest);color:var(--paper);padding:64px 6vw 80px;position:relative;overflow:hidden;}
+  .hero-inner{max-width:640px;position:relative;z-index:2;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(232,184,75,0.15);border:1px solid var(--wheat);color:var(--wheat);padding:5px 14px;border-radius:100px;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:22px;}
+  .hero h1{font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.08;font-weight:700;margin-bottom:18px;}
+  .hero h1 em{font-style:italic;color:var(--wheat);}
+  .hero p{font-size:1.05rem;line-height:1.6;color:#E5E0D2;max-width:480px;margin-bottom:0;}
+  .hero-furrows{position:absolute;right:-5%;top:0;bottom:0;width:55%;opacity:0.18;z-index:1;}
+
+  /* Sponsored strip */
+  .ad-strip{max-width:1180px;margin:-34px auto 0;padding:0 6vw;position:relative;z-index:3;}
+  .ad-card{background:var(--paper);border:1.5px dashed var(--barn);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+  .ad-card img{width:56px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0;}
+  .ad-eyebrow{font-size:0.68rem;font-weight:700;color:var(--barn);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
+  .ad-text{flex:1;font-size:0.92rem;color:#3a3a3a;}
+  .ad-card a.ad-cta{background:var(--barn);color:#fff;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:6px;white-space:nowrap;}
+
+  /* Product grid section */
+  .section-head{max-width:1180px;margin:64px auto 28px;padding:0 6vw;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .section-head h2{font-size:1.8rem;color:var(--forest);}
+  .section-head p{color:var(--soil);font-size:0.9rem;margin:0;}
+
+  .grid{max-width:1180px;margin:0 auto;padding:0 6vw 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:26px;}
+
+  .card{background:var(--paper);border-radius:14px;overflow:hidden;position:relative;box-shadow:0 4px 14px rgba(31,58,46,0.08);transition:transform 0.2s ease, box-shadow 0.2s ease;border-top:4px solid var(--wheat);}
+  .card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(31,58,46,0.16);}
+  .card-media{position:relative;aspect-ratio:9/13;background:#e9e3d3;overflow:hidden;}
+  .card-media img{width:100%;height:100%;object-fit:cover;display:block;}
+  .reel-badge{position:absolute;top:10px;left:10px;background:rgba(27,27,27,0.55);backdrop-filter:blur(2px);color:#fff;font-size:0.68rem;font-weight:600;padding:5px 9px;border-radius:100px;display:flex;align-items:center;gap:5px;}
+  .reel-badge svg{width:11px;height:11px;fill:var(--wheat);}
+  .card-body{padding:14px 16px 18px;}
+  .card-title{font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600;color:var(--forest);margin-bottom:6px;line-height:1.3;}
+  .card-price{color:var(--soil);font-weight:600;font-size:0.95rem;margin-bottom:12px;}
+  .buy-btn{display:block;text-align:center;background:var(--forest);color:var(--cream);font-weight:600;font-size:0.88rem;padding:11px;border-radius:8px;transition:background 0.15s ease;}
+  .buy-btn:hover{background:var(--forest-light);}
+  .buy-btn svg{width:13px;height:13px;vertical-align:-2px;margin-right:5px;fill:var(--wheat);}
+
+  .empty-state{max-width:1180px;margin:0 auto;padding:40px 6vw 100px;text-align:center;color:var(--soil);}
+  .empty-state h3{color:var(--forest);font-size:1.3rem;margin-bottom:8px;}
+
+  footer{background:var(--forest);color:#cfd8cf;padding:34px 6vw;text-align:center;font-size:0.85rem;}
+  footer a{color:var(--wheat);}
+
+  @media(max-width:640px){
+    .hero{padding:48px 6vw 64px;}
+    .ad-strip{margin-top:-20px;}
+    .ad-card{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Khet<span>Kart</span></div>
+  <nav><a href="admin.html">Admin</a></nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">🎥 As seen on our farm reels</div>
+    <h1>Seen it in the reel?<br><em>Get it here.</em></h1>
+    <p>Every product our farmers show you on Instagram — tools, seeds, produce and more — lands here first. Tap a product, and we'll take you straight to it.</p>
+  </div>
+</section>
+
+<div class="ad-strip" id="adStrip"></div>
+
+<div class="section-head">
+  <h2>From the reels</h2>
+  <p id="countLabel">Loading products…</p>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty-state" id="emptyState" style="display:none;">
+  <h3>No products yet</h3>
+  <p>Check back soon — new products from the farm are added regularly.</p>
+</div>
+
+<footer>
+  KhetKart · Straight from the farm, straight to your cart.
+</footer>
+
+<script>
+// ---- CONFIG ----
+// These files must sit next to this index.html on GitHub Pages.
+const PRODUCTS_URL = 'products.json';
+const ADS_URL = 'ads.json';
+
+const PLAY_ICON = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.innerText = str == null ? '' : str;
+  return d.innerHTML;
+}
+
+async function loadJSON(url){
+  try{
+    const res = await fetch(url + '?t=' + Date.now()); // cache-bust so updates show instantly
+    if(!res.ok) return [];
+    return await res.json();
+  }catch(e){
+    console.warn('Could not load', url, e);
+    return [];
+  }
+}
+
+function renderAds(ads){
+  const strip = document.getElementById('adStrip');
+  if(!ads || ads.length === 0){ strip.innerHTML=''; return; }
+  // Show one ad at a time (rotate on reload); simple & clean
+  const ad = ads[Math.floor(Math.random()*ads.length)];
+  strip.innerHTML = `
+    <div class="ad-card">
+      ${ad.image ? `<img src="${escapeHtml(ad.image)}" alt="">` : ''}
+      <div class="ad-text">
+        <div class="ad-eyebrow">Sponsored</div>
+        ${escapeHtml(ad.text || '')}
+      </div>
+      <a class="ad-cta" href="${escapeHtml(ad.link || '#')}" target="_blank" rel="noopener">Learn more</a>
+    </div>`;
+}
+
+function renderProducts(products){
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('emptyState');
+  const count = document.getElementById('countLabel');
+
+  if(!products || products.length === 0){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    count.textContent = '';
+    return;
+  }
+  empty.style.display = 'none';
+  count.textContent = products.length + (products.length === 1 ? ' product' : ' products');
+
+  grid.innerHTML = products.slice().reverse().map(p => `
+    <div class="card">
+      <div class="card-media">
+        <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}" loading="lazy" onerror="this.src='https://placehold.co/400x580/1F3A2E/F7F1E4?text=KhetKart'">
+        <div class="reel-badge">${PLAY_ICON} Reel</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">${escapeHtml(p.title)}</div>
+        ${p.price ? `<div class="card-price">₹${escapeHtml(p.price)}</div>` : ''}
+        <a class="buy-btn" href="${escapeHtml(p.amazonLink)}" target="_blank" rel="noopener">
+          ${PLAY_ICON.replace('fill:var(--wheat)','')} Buy on Amazon
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+(async function init(){
+  const [products, ads] = await Promise.all([loadJSON(PRODUCTS_URL), loadJSON(ADS_URL)]);
+  renderProducts(products);
+  renderAds(ads);
+})();
+</script>
+</body>
+</html>
