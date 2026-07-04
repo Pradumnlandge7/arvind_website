@@ -137,13 +137,21 @@
       <label>Amazon product link</label>
       <input id="pLink" placeholder="https://www.amazon.in/...">
 
-      <label>Product image</label>
+      <label>Description (optional)</label>
+      <textarea id="pDesc" rows="3" placeholder="A line or two about the product — what it's for, key features, etc."></textarea>
+
+      <label>Product photos (you can add more than one)</label>
       <div class="imgtabs">
-        <button type="button" class="active" id="tabUrlBtn" onclick="switchImgTab('url')">Paste image link</button>
-        <button type="button" id="tabUploadBtn" onclick="switchImgTab('upload')">Upload a photo</button>
+        <button type="button" class="active" id="tabUrlBtn" onclick="switchImgTab('url')">Paste image links</button>
+        <button type="button" id="tabUploadBtn" onclick="switchImgTab('upload')">Upload photos</button>
       </div>
-      <div id="imgUrlBox"><input id="pImageUrl" placeholder="https://..."></div>
-      <div id="imgUploadBox" style="display:none;"><input id="pImageFile" type="file" accept="image/*"></div>
+      <div id="imgUrlBox">
+        <textarea id="pImageUrl" rows="3" placeholder="Paste one image link per line, e.g.&#10;https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"></textarea>
+      </div>
+      <div id="imgUploadBox" style="display:none;">
+        <input id="pImageFile" type="file" accept="image/*" multiple>
+        <div class="hint" style="margin-top:-8px;">Select multiple photos at once (hold Ctrl or Shift while choosing files).</div>
+      </div>
 
       <button class="btn-primary" id="addProductBtn" onclick="addProduct()">Add product</button>
     </div>
@@ -356,14 +364,19 @@ function renderProducts(products){
   const empty = document.getElementById('productsEmpty');
   if(!products.length){ body.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display = 'none';
-  body.innerHTML = products.map((p,i) => `
+  body.innerHTML = products.map((p,i) => {
+    const imgs = p.images || (p.image ? [p.image] : []);
+    return `
     <tr>
-      <td><img src="${p.image}" onerror="this.style.opacity=0.2"></td>
-      <td>${escapeHtml(p.title)}</td>
+      <td style="position:relative;">
+        <img src="${imgs[0]||''}" onerror="this.style.opacity=0.2">
+        ${imgs.length > 1 ? `<span style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.65);color:#fff;font-size:0.65rem;padding:1px 5px;border-radius:100px;">+${imgs.length-1}</span>` : ''}
+      </td>
+      <td>${escapeHtml(p.title)}${p.description ? `<div style="color:#9c9585;font-size:0.78rem;margin-top:2px;">${escapeHtml(p.description.slice(0,60))}${p.description.length>60?'…':''}</div>` : ''}</td>
       <td class="price">${p.price ? '₹'+escapeHtml(p.price) : '—'}</td>
       <td><button class="btn-danger" onclick="deleteProduct(${i})">Delete</button></td>
     </tr>
-  `).join('');
+  `;}).join('');
 }
 
 function escapeHtml(str){ const d=document.createElement('div'); d.innerText = str==null?'':str; return d.innerHTML; }
@@ -372,33 +385,41 @@ async function addProduct(){
   const title = document.getElementById('pTitle').value.trim();
   const price = document.getElementById('pPrice').value.trim();
   const link = document.getElementById('pLink').value.trim();
+  const desc = document.getElementById('pDesc').value.trim();
   const urlMode = document.getElementById('imgUrlBox').style.display !== 'none';
   const btn = document.getElementById('addProductBtn');
 
   if(!title || !link){ showToast('Please add at least a title and Amazon link.', true); return; }
 
-  let imageUrl = '';
+  let images = [];
   btn.disabled = true;
   const originalText = btn.textContent;
-  btn.innerHTML = '<span class="spinner"></span>Saving…';
 
   try{
     if(urlMode){
-      imageUrl = document.getElementById('pImageUrl').value.trim();
-      if(!imageUrl){ showToast('Please paste an image link, or switch to upload.', true); btn.disabled=false; btn.textContent=originalText; return; }
+      images = document.getElementById('pImageUrl').value
+        .split('\n').map(s => s.trim()).filter(Boolean);
+      if(images.length === 0){ showToast('Please paste at least one image link, or switch to upload.', true); btn.disabled=false; btn.textContent=originalText; return; }
+      btn.innerHTML = '<span class="spinner"></span>Saving…';
     } else {
-      const file = document.getElementById('pImageFile').files[0];
-      if(!file){ showToast('Please choose a photo to upload.', true); btn.disabled=false; btn.textContent=originalText; return; }
-      imageUrl = await ghUploadImage(file);
+      const files = Array.from(document.getElementById('pImageFile').files);
+      if(files.length === 0){ showToast('Please choose at least one photo to upload.', true); btn.disabled=false; btn.textContent=originalText; return; }
+      for(let i=0; i<files.length; i++){
+        btn.innerHTML = `<span class="spinner"></span>Uploading photo ${i+1} of ${files.length}…`;
+        const url = await ghUploadImage(files[i]);
+        images.push(url);
+      }
+      btn.innerHTML = '<span class="spinner"></span>Saving…';
     }
 
     const { sha, data } = await ghGetFile('products.json');
-    data.push({ id: Date.now(), title, price, amazonLink: link, image: imageUrl });
+    data.push({ id: Date.now(), title, price, description: desc, amazonLink: link, images });
     await ghPutFile('products.json', data, sha, `Add product: ${title}`);
 
     document.getElementById('pTitle').value='';
     document.getElementById('pPrice').value='';
     document.getElementById('pLink').value='';
+    document.getElementById('pDesc').value='';
     document.getElementById('pImageUrl').value='';
     document.getElementById('pImageFile').value='';
 
